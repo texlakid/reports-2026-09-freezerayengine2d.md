@@ -1,24 +1,24 @@
 # Security Assessment Report
 
-Target: freezerayengine2d.netlify.app  
-Date: 9 September 2026  
-Assessor: Alexander Anthony  
-Authorization: Site owner Bogdan Hapco  
-Time: 30 minutes  
-
-
+**Target:** [Redacted].netlify.app (Static Web Application)  
+**Date:** 9 September 2026  
+**Assessor:** Alexander Anthony ( texla)  
+**Authorization:** Site owner (Written consent obtained)  
+**Time:** 30 minutes  
 
 ## Executive Summary
 
-I conducted a limited security assessment of the above website with owner permission. The target is a static single-page application hosted on Netlify. No critical or high-severity vulnerabilities were found. The application has no backend, no external API calls, and no exposed sensitive data. Findings are limited to missing security headers.
+I conducted a limited security assessment of the above website with the owner's permission. The target is a static single-page application hosted on Netlify. 
+
+No critical or high-severity vulnerabilities were found. The application has no backend, no external API calls, and no exposed sensitive data. Findings are limited to missing security headers.
 
 ## Scope & Methodology
 
-- ★Passive reconnaissance: DNS lookups, HTTP header analysis, page source review
-- ★Enumeration: Manual checks for common sensitive files (robots.txt, .env, .git/config, etc.), extraction and analysis of inline JavaScript
-- ★Vulnerability tests: Open redirect, CORS misconfiguration, missing security headers
+- **Passive reconnaissance:** DNS lookups, HTTP header analysis, page source review.
+- **Enumeration:** Manual checks for common sensitive files (robots.txt, .env, .git/config, etc.), extraction and analysis of inline JavaScript.
+- **Vulnerability tests:** Open redirect, CORS misconfiguration, missing security headers.
 
-Port scanning and aggressive directory brute-forcing were deliberately avoided due to Netlify's shared CDN infrastructure.
+*Note: Port scanning and aggressive directory brute-forcing were deliberately avoided due to the target's shared CDN infrastructure (Netlify) to prevent impacting other tenants.*
 
 ## Findings
 
@@ -34,14 +34,12 @@ No open redirect, CORS misconfiguration, or exposed API keys were found.
 
 ## Remediation — Netlify `_headers` File
 
-Create a file named `_headers` in the publish directory:
+To apply these fixes, create a file named `_headers` in the publish directory with the following content:
+
+```text
 /*
-Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'
-X-Frame-Options: DENY
-X-Content-Type-Options: nosniff
-Referrer-Policy: no-referrer
-Permissions-Policy: camera=(), microphone=(), geolocation=()
-
-## Conclusion
-
-The site is secure for its current static purpose. Adding the recommended headers will further harden it against common web attacks and demonstrate good security hygiene.
+  Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: no-referrer
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
